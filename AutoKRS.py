@@ -39,11 +39,11 @@ for i in product(*kombinasi_krs):
             if m != '':
                 k = m.split('-')
                 if k[0] not in lister:
-                    lister[k[0]] = [k[1]]
+                    lister[k[0]] = k[1]
                     kelas.append(m)
                 else:
                     if k[1] not in lister[k[0]]:
-                        lister[k[0]].append(k[1])
+                        lister[k[0]] = k[1]
                         kelas.append(m) 
                     else:
                         inval.append(k[0])
