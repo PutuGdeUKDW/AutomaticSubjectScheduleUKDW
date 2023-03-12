@@ -1,5 +1,7 @@
 from itertools import product
 
+
+
 krs = {
 'senin': [['KaKom-C',''],['JARNIR-A'],['PROGWEB-C','PROGWEB-D',''],['']],
 'selasa':[['AI-C','AI-D',''],['RPLBO-C','RPLBO-D','AI-A','AI-B',''],['PROGWEB-A','PROGWEB-B','EtProf-C','EtProf-D',''],['']],
@@ -8,27 +10,17 @@ krs = {
 'jumat':[['PrRPLBO-C2','PrRPLBO-D2',''],[''],[''],['']]
     }
 
-kombinasi_krs = [[],[],[],[],[]]
-hari = ['senin','selasa','rabu','kamis','jumat']
+kombinasi_krs = []
+hari = {'senin': 0, 'selasa': 1, 'rabu': 2, 'kamis': 3, 'jumat': 4}
 
-for l in product(*krs['senin']):
-    kombinasi_krs[0].append(list(l))
+for day in krs:
+    combos = []
+    for l in product(*krs[day]):
+        combos.append(list(l))
+    kombinasi_krs.append(combos)
 
-for l in product(*krs['selasa']):
-    kombinasi_krs[1].append(list(l))
-
-for l in product(*krs['rabu']):
-    kombinasi_krs[2].append(list(l))
-
-for l in product(*krs['kamis']):
-    kombinasi_krs[3].append(list(l))
-
-for l in product(*krs['jumat']):
-    kombinasi_krs[4].append(list(l))
 
 counter = 1
-limit = 0
-
 for i in product(*kombinasi_krs):
     i = list(i)
     lister = {}
@@ -38,22 +30,21 @@ for i in product(*kombinasi_krs):
         for m in i[j]:
             if m != '':
                 k = m.split('-')
-                if k[0] not in lister:
-                    lister[k[0]] = k[1]
+                if any(ava == k[0] for ava in lister) == False:
+                    lister[k[0]] = k[1][0]
                     kelas.append(m)
                 else:
-                    if k[1] not in lister[k[0]]:
-                        lister[k[0]] = k[1]
-                        kelas.append(m) 
-                    else:
+                    if lister[k[0]] != k[1][0]:
                         inval.append(k[0])
-
-    if len(lister) == 9 and len(inval) == 0 and counter != 50:
+                    else:
+                        kelas.append(m)
+                        
+    if len(lister) == 9 and len(inval) == 0 and counter != 50 and len(kelas) == 10:
         print(lister)
-        print(kelas)
+        #print(kelas)
         count = 0
         for jadi in i:
-            print(hari[count])
+            print(list(krs.keys())[count])
             print('Sesi 1: '+jadi[0])
             print('Sesi 2: '+jadi[1])
             print('Sesi 3: '+jadi[2])
@@ -61,4 +52,3 @@ for i in product(*kombinasi_krs):
             count +=1
         counter +=1
         print('\n')
-
