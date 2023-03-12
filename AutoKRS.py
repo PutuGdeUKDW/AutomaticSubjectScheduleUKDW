@@ -3,11 +3,11 @@ from itertools import product
 
 
 krs = {
-'senin': [['KaKom-C',''],['JARNIR-A'],['PROGWEB-C','PROGWEB-D',''],['']],
-'selasa':[['AI-C','AI-D',''],['RPLBO-C','RPLBO-D','AI-A','AI-B',''],['PROGWEB-A','PROGWEB-B','EtProf-C','EtProf-D',''],['']],
-'rabu':[['PrRPLBO-C1','PrRPLBO-D1','KaKom-B',''],['PrPROGWEB-A','PrPROGWEB-B',''],['PP-H','PP-I','PrPROGWEB-C','PrPROGWEB-D',''],['']],
-'kamis':[['KaKom-A','KaKom-D',''],[''],['PP-J','PP-K','EtProf-B',''],['']],
-'jumat':[['PrRPLBO-C2','PrRPLBO-D2',''],[''],[''],['']]
+'senin': [['',''],[''],[''],['']],
+'selasa':[[''],[''],[''],['']],
+'rabu':[[''],[''],[''],['']],
+'kamis':[[''],[''],[''],['']],
+'jumat':[[''],[''],[''],['']]
     }
 
 kombinasi_krs = []
