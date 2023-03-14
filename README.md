@@ -1,3 +1,3 @@
 # AutomaticSubjectScheduleUKDW
-A simple program to automatically make many iteration of your semester's schedule [WIP]
+A simple program to automatically make many iteration and find the right class schedule for you! [WIP]
 
