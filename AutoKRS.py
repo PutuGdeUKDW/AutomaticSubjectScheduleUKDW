@@ -3,10 +3,32 @@ from tqdm import tqdm
 
 class AutoKRS:
     def __init__(self, krs_raw):
+        """
+        Initializes the object.
+
+        Parameters:
+        krs_raw {dict}: Dictionary of the form {day: [list of classes]}
+        that contain the available classes for each days.
+
+        Returns:
+        None
+        """
         self.krs_raw = krs_raw
         self.krs = self.combinator(self.krs_raw)
     
     def generate_combinations(self, lst, current=[], index=0):
+        """
+        Generate all possible combinations of the classes
+
+        Parameters:
+        lst [list]: Lists inside of a list that contain all available classes for each day.
+        current [list]: Empty by default. List of classes that have been generated so far.
+        index (int): 0 by default. The current index in the lst that is being iterated.
+        
+        Returns:
+        Generator that yields all possible combinations of classes for the day.
+        """
+
         if index == len(lst):
             yield current
         else:
@@ -15,8 +37,19 @@ class AutoKRS:
                 yield from self.generate_combinations(lst, new_current, index+1)
 
     def combinator(self,krs):
-        kombinasi_krs = []
+        """
+        Generates all possible schedules from the available classes for each day.
 
+        Parameters:
+        krs {dict}: Dictionary of the form {day: [list of classes]}
+        that contain the available classes for each days.
+
+        Returns:
+        All possible schedules inside a list.
+
+        """
+
+        kombinasi_krs = []
         for day in krs:
             combos = []
             for l in self.generate_combinations(krs[day]):
@@ -25,10 +58,18 @@ class AutoKRS:
         return kombinasi_krs
 
     def krs_iterator(self, filename):
+        """
+        Iterates over all possible schedules and saves it to a JSON file.
+
+        Parameters:
+        filename (string): The name of the JSON file for saving the generated schedules.
+
+        Returns:
+        None
+        """
         counter = 1
-        combinator_result = self.generate_combinations(self.krs)
         krs_data=[]
-        for i in tqdm(combinator_result):
+        for i in tqdm(self.generate_combinations(self.krs)):
             i = list(i)
             lister = {}
             inval = []
@@ -69,14 +110,34 @@ class AutoKRS:
 
         with open(filename, 'w') as file:
             json.dump(krs_data, file)
-        print("DONE")
 
     def load_krs(self,filename):
+        """
+        Loads the schedules from the save files that are a JSON format.
+
+        Parameters:
+        filename (string): The name of the JSON file to load the schedule from.
+
+        Returns:
+        A list of schedules.
+
+        """
+
         with open(filename, 'r') as file:
             krs_data = json.load(file)
         return krs_data
     
     def hitung_pertemuan(self, kelas):
+        """
+        Count the total number of meetings from the given list of classes.
+
+        Parameters:
+        kelas [list]: A list of the desired classes.
+
+        Returns:
+        The total number of meetings.
+        """
+
         jumlah = len(kelas)
         for i in kelas:
             if i[:2] == 'Pr':
@@ -87,10 +148,20 @@ class AutoKRS:
                         break
                     elif tempe == 'n':
                         break
-        print('\n')
         return jumlah
                     
     def print_krs(self,json_location,wishlist):
+        """
+        Filter and prints the schedules that meet the criteria specified in the wishlist.
+
+        Parameters:
+        json_location (string): The name of the JSON file containing the schedules.
+        wishlist [list]: A list of classes that must be in the schedule.
+
+        Returns:
+        None
+        """
+
         print('\n')
         krs_data = self.load_krs(json_location)
         counter = 1
@@ -119,6 +190,8 @@ class AutoKRS:
                 counter +=1
         if counter == 1:
             print('\n===Kelas Tidak Ditemukan, coba ganti kelas===')
+            
+            
 krs_raw = {
 'senin': [[''],[''],[''],['']],
 'selasa':[[''],[''],[''],['']],
