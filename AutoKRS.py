@@ -1,4 +1,5 @@
 import json
+from tqdm import tqdm
 
 class AutoKRS:
     def __init__(self, krs_raw):
@@ -25,8 +26,9 @@ class AutoKRS:
 
     def krs_iterator(self, filename):
         counter = 1
+        combinator_result = self.generate_combinations(self.krs)
         krs_data=[]
-        for i in self.generate_combinations(self.krs):
+        for i in tqdm(combinator_result):
             i = list(i)
             lister = {}
             inval = []
@@ -45,7 +47,6 @@ class AutoKRS:
                             else:
                                 kelas.append(m)
 
-            #if len(lister) == 9 and len(inval) == 0 and len(kelas) == 10:
             if len(inval) == 0 :
                 krs_item = {}
                 krs_item['counter'] = counter
@@ -68,19 +69,44 @@ class AutoKRS:
 
         with open(filename, 'w') as file:
             json.dump(krs_data, file)
+        print("DONE")
 
     def load_krs(self,filename):
         with open(filename, 'r') as file:
             krs_data = json.load(file)
         return krs_data
     
-    def print_krs(self,json_location):
+    def hitung_pertemuan(self, kelas):
+        jumlah = len(kelas)
+        for i in kelas:
+            if i[:2] == 'Pr':
+                while True:
+                    tempe = str(input(f"Apakah {i} ada 2(dua) pertemuan perminggu (y/n)? "))
+                    if tempe == 'y':
+                        jumlah +=1
+                        break
+                    elif tempe == 'n':
+                        break
+        print('\n')
+        return jumlah
+                    
+    def print_krs(self,json_location,wishlist):
+        print('\n')
         krs_data = self.load_krs(json_location)
         counter = 1
-
+        jumlah_kel = self.hitung_pertemuan(wishlist)
         for krs_schedule in krs_data:
-            
-            if len(krs_schedule['schedule']) == 9 and krs_schedule['class_tot'] == 10:
+            mek = len(wishlist)
+            for i in wishing:
+                j = i.split('-')
+                if j[-1] == j[0]:
+                    if j[0] in krs_schedule['schedule']:
+                        mek -=1
+                else:
+                    if j[0] in krs_schedule['schedule']:
+                        if krs_schedule['schedule'][j[0]] == j[1][0]:
+                            mek -=1
+            if len(krs_schedule['schedule']) == len(wishlist) and krs_schedule['class_tot'] == jumlah_kel and mek == 0:
                 print(str(counter)+'. KRS Schedule #{}'.format(krs_schedule['counter']))
                 print('------------------------')
                 for day_schedule in krs_schedule['day_schedule']:
@@ -91,7 +117,8 @@ class AutoKRS:
                     print('  Sesi 4: {}'.format(day_schedule['sesi_4']))
                 print('------------------------\n')
                 counter +=1
-
+        if counter == 1:
+            print('\n===Kelas Tidak Ditemukan, coba ganti kelas===')
 krs_raw = {
 'senin': [[''],[''],[''],['']],
 'selasa':[[''],[''],[''],['']],
@@ -100,6 +127,9 @@ krs_raw = {
 'jumat':[[''],[''],[''],['']]
     }
 
+
 krs = AutoKRS(krs_raw)
+wishing = ['']
 krs.krs_iterator('krs.json')
-krs.print_krs('krs.json')
+print("==================================")
+krs.print_krs('krs.json',wishing)
