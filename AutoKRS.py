@@ -67,14 +67,14 @@ class AutoKRS:
         Returns:
         None
         """
+        jumlah_matkul_wajib = int(input('Berapa mata kuliah wajib semester ini: '))
         counter = 1
         krs_data=[]
         for i in tqdm(self.generate_combinations(self.krs)):
             i = list(i)
             lister = {}
-            inval = []
             kelas = []
-            
+            inval = []
             for j in range(len(list(i))):
                 for m in i[j]:
                     if m != '':
@@ -85,10 +85,15 @@ class AutoKRS:
                         else:
                             if lister[k[0]] != k[1][0]:
                                 inval.append(k[0])
+                                break
                             else:
                                 kelas.append(m)
+                if inval:
+                    break   
+            if inval:
+                continue
 
-            if len(inval) == 0 :
+            if len(kelas) >= jumlah_matkul_wajib :
                 krs_item = {}
                 krs_item['counter'] = counter
                 krs_item['schedule'] = lister
@@ -108,8 +113,10 @@ class AutoKRS:
                 krs_data.append(krs_item)
                 counter +=1
 
+        print("SAVING SCHEDULES ITERATIONS")
         with open(filename, 'w') as file:
             json.dump(krs_data, file)
+        print("COMPLETE")
 
     def load_krs(self,filename):
         """
@@ -168,7 +175,7 @@ class AutoKRS:
         jumlah_kel = self.hitung_pertemuan(wishlist)
         for krs_schedule in krs_data:
             mek = len(wishlist)
-            for i in wishing:
+            for i in wishlist:
                 j = i.split('-')
                 if j[-1] == j[0]:
                     if j[0] in krs_schedule['schedule']:
@@ -190,19 +197,3 @@ class AutoKRS:
                 counter +=1
         if counter == 1:
             print('\n===Kelas Tidak Ditemukan, coba ganti kelas===')
-            
-            
-krs_raw = {
-'senin': [[''],[''],[''],['']],
-'selasa':[[''],[''],[''],['']],
-'rabu':[[''],[''],[''],['']],
-'kamis':[[''],[''],[''],['']],
-'jumat':[[''],[''],[''],['']]
-    }
-
-
-krs = AutoKRS(krs_raw)
-wishing = ['']
-krs.krs_iterator('krs.json')
-print("==================================")
-krs.print_krs('krs.json',wishing)
