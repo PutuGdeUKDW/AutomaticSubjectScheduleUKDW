@@ -40,6 +40,7 @@ class AutoKRS:
         else:
             for element in lst[index]:
                 new_current = current + [element]
+                print(new_current)
                 yield from self.generate_combinations(lst, new_current, index+1)
 
     def combinator(self, krs):
@@ -769,7 +770,7 @@ class AcademicSubjects:
     
 
 
-
+'''
 
 pdf_path = "04_JadwalKuliah_2022_2023_2Genap_toStudent_230116_01.pdf"
 csv_path = "ile.csv"
@@ -800,3 +801,4 @@ sksAmbil = user.usr_AS.getMaksSKS()
 print(f"Maksimal SKS yang boleh diambil adalah {sksAmbil} SKS")
 
 user.usr_AS.readSubjects("Subjects.csv")
+'''
